@@ -1,7 +1,5 @@
 // Google Analytics & Events
 
-var analyticsOn = false; // switch on/off Google Analytics event tracking 
-
 // (function(i, s, o, g, r, a, m) {
 //   i['GoogleAnalyticsObject'] = r;
 //   i[r] = i[r] || function() {
@@ -25,7 +23,7 @@ function trackEvent(action, location) {
 	var eventAction = gameName + ": " + action; // type of event (Click, etc)
 	var eventLabel = gameName + ": " + location; // property of action (Splash screen, Win screen, etc)
 
-	if (analyticsOn) {
+	if (settings.ANALYTICS_ON) {
 		ga('send', 'event', eventCategory, eventAction, eventLabel);
 	}
 }

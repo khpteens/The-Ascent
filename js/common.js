@@ -1,9 +1,40 @@
-// Utility.js holds utility functions
+// Common.js holds utility functions & settings
 
-var analyticsOn = false; // turn on Google Analytics event tracking 
-var copyright_txt = "© Brotalk",
-	release_txt = "BETA"; // .July.30.2015";
+// VARIABLES ***********************************************
 
+var settings = {
+	"WIDTH": 500,
+	"HEIGHT": undefined,
+	"RATIO": window.innerHeight / window.innerWidth,
+	"RATIO_MIN": 1.2,
+
+	"PAUSED": false,
+
+	"ANALYTICS_ON": false,
+
+	"SOUND_ON": true,
+	"VOLUME": 0.2,
+
+	"FULLSCREEN": false,
+
+	"CONTAINER": "game",
+	"FRAME": document.getElementById("game"),
+	"ELEMENT": document.querySelector('#game'),
+	"FRAME_WIDTH": Number(window.getComputedStyle(document.querySelector('#game')).width.replace(/\D/g, '')),
+	"FRAME_HEIGHT": Number(window.getComputedStyle(document.querySelector('#game')).height.replace(/\D/g, ''))
+};
+
+if (settings.RATIO <= settings.RATIO_MIN) {
+	settings.RATIO = settings.RATIO_MIN; // widest is square, no limit to height
+}
+
+settings.HEIGHT = settings.RATIO * settings.WIDTH;
+
+var copyright_txt = "© BroTalk",
+	release_txt = "BETA.Aug.12.2015";
+
+
+// FUNCTIONS ***********************************************
 
 function trace(s, c, bg) {
 	var style;
@@ -161,31 +192,38 @@ function openInNewTab(url) {
 	win.focus();
 }
 
-// Google Analytics & Events
-// (function(i, s, o, g, r, a, m) {
-//   i['GoogleAnalyticsObject'] = r;
-//   i[r] = i[r] || function() {
-//     (i[r].q = i[r].q || []).push(arguments)
-//   }, i[r].l = 1 * new Date();
-//   a = s.createElement(o),
-//     m = s.getElementsByTagName(o)[0];
-//   a.async = 1;
-//   a.src = g;
-//   m.parentNode.insertBefore(a, m)
-// })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
-// ga('create', 'UA-15452863-1', 'auto');
-// ga('send', 'pageview');
+function soundToggle() {
 
-function trackEvent(action, location) {
+	if (!settings.SOUND_ON) {
+		settings.SOUND_ON = true;
+		settings.VOLUME = 0.2;
+		trace("Sound On");
+	} else {
+		settings.SOUND_ON = false,
+			settings.VOLUME = 0;
+		trace("Sound Off");
+	}
+}
 
-	location = location.replace("scene", "Scene ");
+function fullscreenToggle() {
 
-	var eventCategory = "Game events"; // file all Pic'd tracking events under "Game events" instead of "Interactives"
+	if (!settings.FULLSCREEN) {
 
-	var eventAction = gameName + ": " + action; // type of event (Click, etc)
-	var eventLabel = gameName + ": " + location; // property of action (Splash screen, Win screen, etc)
+		settings.FULLSCREEN = true;
+		settings.FRAME_WIDTH = settings.FRAME.style.width;
+		settings.FRAME_HEIGHT = settings.FRAME.style.height;
 
-	if (analyticsOn) {
-		ga('send', 'event', eventCategory, eventAction, eventLabel);
+		settings.FRAME.style.zindex = 500;
+		settings.FRAME.style.position = "absolute";
+		settings.FRAME.style.width = window.innerWidth + "px";
+		settings.FRAME.style.height = window.innerHeight + "px";
+
+	} else {
+		settings.FULLSCREEN = false;
+
+		settings.FRAME.style.zindex = 1;
+		settings.FRAME.style.position = "relative";
+		settings.FRAME.style.width = settings.FRAME_WIDTH;
+		settings.FRAME.style.height = settings.FRAME_HEIGHT;
 	}
 }

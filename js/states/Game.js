@@ -91,10 +91,7 @@ Climb.Game.prototype = {
 
             // camera related
             camera_center();
-            camera_follow_team();
-            // drag_camera(this.game.input.mousePointer);
-            // drag_camera(this.game.input.pointer1);
-            // update_camera();
+            camera_follow_team();            
 
             if (!gameComplete) {
                 gameCheckWin();
@@ -114,30 +111,29 @@ function createOptionsScreen() {
     var optionBg = Climb.game.add.graphics(0, 0);
     optionBg.beginFill(0x938884, 1);
     optionBg.boundsPadding = 0;
-    optionBg.drawRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
+    optionBg.drawRect(0, 0, settings.WIDTH, settings.HEIGHT);
     optionBg.alpha = 0.9;
     optionBg.inputEnabled = true;
     optionsScreen.add(optionBg);
 
-    // copyright text
-    text = copyright_txt;
-    var optionC = Climb.game.add.text(GAME_WIDTH - 10, GAME_HEIGHT, text, copyright_style);
+    // copyright text    
+    var optionC = Climb.game.add.text(settings.WIDTH - 10, settings.HEIGHT, copyright_txt, copyright_style);
     optionC.anchor.set(1, 1);
     optionsScreen.add(optionC);
 
     // "Options"
     text = "Options",
-        optionTitle = Climb.game.add.text(GAME_WIDTH / 2, GAME_HEIGHT / 2 - 200, text, h1_style);
+        optionTitle = Climb.game.add.text(settings.WIDTH / 2, settings.HEIGHT / 2 - 200, text, h1_style);
     optionTitle.anchor.set(0.5);
     optionsScreen.add(optionTitle);
 
     // "Your game is paused"
     text = "Your game has been paused.";
-    optionSub = Climb.game.add.text(GAME_WIDTH / 2, GAME_HEIGHT / 2 - 140, text, h3_style);
+    optionSub = Climb.game.add.text(settings.WIDTH / 2, settings.HEIGHT / 2 - 140, text, h3_style);
     optionSub.anchor.set(0.5);
     optionsScreen.add(optionSub);
 
-    var ResumeBt = Climb.game.add.sprite(GAME_WIDTH / 2, GAME_HEIGHT / 2 - 40, "square");
+    var ResumeBt = Climb.game.add.sprite(settings.WIDTH / 2, settings.HEIGHT / 2 - 40, "square");
     createBt(ResumeBt, "Resume", false);
     ResumeBt.events.onInputUp.add(function() {
         optionsHide();
@@ -146,7 +142,7 @@ function createOptionsScreen() {
     optionsScreen.add(ResumeBt.label);
     optionsScreen.add(ResumeBt.border);
 
-    var RestartBt = Climb.game.add.sprite(GAME_WIDTH / 2, GAME_HEIGHT / 2 + 20, "square");
+    var RestartBt = Climb.game.add.sprite(settings.WIDTH / 2, settings.HEIGHT / 2 + 20, "square");
     createBt(RestartBt, "Restart", false);
     RestartBt.events.onInputUp.add(function() {
         optionsHide();
@@ -156,19 +152,19 @@ function createOptionsScreen() {
     optionsScreen.add(RestartBt.label);
     optionsScreen.add(RestartBt.border);
 
-    var ExitBt = Climb.game.add.sprite(GAME_WIDTH / 2, GAME_HEIGHT / 2 + 140, "square");
+    var ExitBt = Climb.game.add.sprite(settings.WIDTH / 2, settings.HEIGHT / 2 + 140, "square");
     createBt(ExitBt, "Main menu", "MainMenu");
     optionsScreen.add(ExitBt);
     optionsScreen.add(ExitBt.label);
     optionsScreen.add(ExitBt.border);
 
-    var InstructionsBt = Climb.game.add.sprite(GAME_WIDTH / 2, GAME_HEIGHT / 2 + 200, "square");
+    var InstructionsBt = Climb.game.add.sprite(settings.WIDTH / 2, settings.HEIGHT / 2 + 200, "square");
     createBt(InstructionsBt, "How to play", "Instructions");
     optionsScreen.add(InstructionsBt);
     optionsScreen.add(InstructionsBt.label);
     optionsScreen.add(InstructionsBt.border);
 
-    var optionCloseBt = Climb.game.add.sprite(GAME_WIDTH - 29, 29, "square");
+    var optionCloseBt = Climb.game.add.sprite(settings.WIDTH - 29, 29, "square");
     createBt(optionCloseBt, "icon-x", false, "circle");
     optionCloseBt.events.onInputUp.add(function() {
         optionsHide();
@@ -228,19 +224,19 @@ function createWinText() {
 
     // create and add text sprite telling the player they have won    
     var text = "Your team has\nreached the summit!"
-    winText = Climb.game.add.text(GAME_WIDTH / 2, GAME_HEIGHT / 2 - 40, text, h2_style);
+    winText = Climb.game.add.text(settings.WIDTH / 2, settings.HEIGHT / 2 - 40, text, h2_style);
     winText.anchor.set(0.5);
     winMessage.add(winText);
 
     // Continue button
-    ContinueBt = Climb.game.add.sprite(GAME_WIDTH / 2, GAME_HEIGHT / 2 + 60, 'square');
+    ContinueBt = Climb.game.add.sprite(settings.WIDTH / 2, settings.HEIGHT / 2 + 60, 'square');
     createBt(ContinueBt, "Continue", "Finish");
     winMessage.add(ContinueBt);
     winMessage.add(ContinueBt.label);
     winMessage.add(ContinueBt.border);
 
     // Restart button
-    AgainBt = Climb.game.add.sprite(GAME_WIDTH / 2, GAME_HEIGHT / 2 + 120, 'square');
+    AgainBt = Climb.game.add.sprite(settings.WIDTH / 2, settings.HEIGHT / 2 + 120, 'square');
     createBt(AgainBt, "Restart", false);
     AgainBt.events.onInputUp.add(function() {
         winMessage.visible = false;
@@ -258,7 +254,7 @@ function createBackground() {
     background = Climb.game.add.group();
 
     var mountains = background.create(0, 0, "bg-mountains");
-    mountains.height = GAME_HEIGHT; // Climb.game.world.height;
+    mountains.height = settings.HEIGHT; 
     mountains.anchor.set(0.5, 0);
     background.fixedToCamera = true;
 }
@@ -853,7 +849,7 @@ function gameRestart() {
     if (Climb.game.device.touch) touchinterface.visible = true; // show touch interface if hasTouch    
 
     Climb.game.camera.x = 0;
-    Climb.game.camera.y = Climb.game.world.height - GAME_HEIGHT;
+    Climb.game.camera.y = Climb.game.world.height - settings.HEIGHT;
 
     T.x = T.lastX = 25;
     T.y = T.lastY = Climb.game.world.height - 300;
@@ -964,8 +960,8 @@ function camera_center() {
             if (myX > right) right = myX;
         }
 
-        teamCenter.x = ((left + right) / 2) - GAME_WIDTH / 2;
-        teamCenter.y = ((top + bottom) / 2) - GAME_HEIGHT / 2;
+        teamCenter.x = ((left + right) / 2) - settings.WIDTH / 2;
+        teamCenter.y = ((top + bottom) / 2) - settings.HEIGHT / 2;
     }
 }
 

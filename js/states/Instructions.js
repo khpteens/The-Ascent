@@ -7,7 +7,7 @@ Climb.Instructions = function() {};
 
 Climb.Instructions.prototype = {
 	init: function() {
-		this.game.world.resize(GAME_WIDTH, GAME_HEIGHT);
+		this.game.world.resize(settings.WIDTH, settings.HEIGHT);
 	},
 	create: function() {
 

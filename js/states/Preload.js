@@ -18,7 +18,7 @@ Climb.Preload = function() {};
 
 Climb.Preload.prototype = {
 	init: function() {
-		this.game.world.resize(GAME_WIDTH, GAME_HEIGHT);
+		this.game.world.resize(settings.WIDTH, settings.HEIGHT);
 	},
 	preload: function() {
 
@@ -55,6 +55,10 @@ Climb.Preload.prototype = {
 		this.load.image('icon-refresh', 'assets/img/i/refresh.png');
 		this.load.image('icon-phone', 'assets/img/i/phone.png');	
 		this.load.image('icon-chat', 'assets/img/i/chat.png');
+		this.load.image('icon-note', 'assets/img/i/note.png');
+		this.load.image('icon-speaker', 'assets/img/i/speaker.png');
+		this.load.image('icon-expand', 'assets/img/i/expand.png');
+		this.load.image('icon-contract', 'assets/img/i/contract.png');
 
 		// sprites
 		this.load.image('bg-mountains', 'assets/img/bg-mountains.png');
