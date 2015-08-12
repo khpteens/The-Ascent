@@ -81,6 +81,7 @@ Climb.Game.prototype = {
         camera_follow_team();
 
         createCopyright();
+        createSoundScreenToggles();
     },
     update: function() { // Game logic, collision, movement, etc...
 
@@ -116,10 +117,10 @@ function createOptionsScreen() {
     optionBg.inputEnabled = true;
     optionsScreen.add(optionBg);
 
-    // copyright text    
-    var optionC = Climb.game.add.text(settings.WIDTH - 10, settings.HEIGHT, copyright_txt, copyright_style);
-    optionC.anchor.set(1, 1);
-    optionsScreen.add(optionC);
+    // // copyright text    
+    // var optionC = Climb.game.add.text(settings.WIDTH - 10, settings.HEIGHT, copyright_txt, copyright_style);
+    // optionC.anchor.set(1, 1);
+    // optionsScreen.add(optionC);
 
     // "Options"
     text = "Options",
