@@ -13,7 +13,7 @@ var settings = {
 	"ANALYTICS_ON": false,
 
 	"SOUND_ON": true,
-	"VOLUME": 0.2,
+	"VOLUME": 1,
 
 	"FULLSCREEN": false,
 
@@ -61,10 +61,10 @@ function createBG(color, bg) {
 	bg_group.add(bg);
 
 	var st = Climb.game.state.getCurrentState().key;
-	if(st != "Preload" && st != "Game"){
+	if (st != "Preload" && st != "Game") {
 		var bg_image = Climb.game.add.sprite(Climb.game.width / 2, Climb.game.height / 2, "bg-mountains");
 		// bg_image.width = Climb.game.width;
-		bg_image.height = Climb.game.height;		
+		bg_image.height = Climb.game.height;
 		bg_image.anchor.set(0.5);
 		bg_image.scale.set(1.2);
 		// bg_image.tint = color;
@@ -74,13 +74,16 @@ function createBG(color, bg) {
 
 function createBt(button, label_text, target_state, shape, iconImage) {
 
-	if (!label_text) label_text = "";	
+	if (!label_text) label_text = "";
 	if (!shape) shape = "default";
 
 	// sprite parameters	
 	if (shape == "circle") {
 		button.height = button.h = 60;
 		button.width = button.w = 60;
+	} else if (shape == "square-small") {
+		button.height = button.h = 30;
+		button.width = button.w = 30;
 	} else {
 		button.height = button.h = 60;
 		button.width = button.w = 350;
@@ -94,7 +97,7 @@ function createBt(button, label_text, target_state, shape, iconImage) {
 	button.alpha = 0;
 
 	// add border
-	var border = Climb.game.add.graphics(0, 0);	
+	var border = Climb.game.add.graphics(0, 0);
 	border.lineStyle(2, 0xffffff, 1);
 	if (shape == "circle") {
 		// border.drawCircle(button.x, button.y, button.width, button.height);
@@ -105,16 +108,22 @@ function createBt(button, label_text, target_state, shape, iconImage) {
 	border.boundsPadding = 0;
 	button.border = border;
 	border.alpha = 1;
+	if (shape == "square-small") border.alpha = 0;
 
 	// add label
 	var label;
-	if (label_text.indexOf("icon") == -1){
+	if (label_text.indexOf("icon") == -1) {
 		label = Climb.game.add.text(button.x, button.y + 3, label_text.toUpperCase(), button_style);
 		label.lineSpacing = -5;
-	}else{
+	} else {
 		label = Climb.game.add.sprite(button.x, button.y, label_text);
-		label.width = 25;
-		label.height = 25;
+
+		var labelSize = 25;
+		if (shape == "square-small") {
+			labelSize = 18;
+		}
+		label.width = labelSize;
+		label.height = labelSize;
 	}
 	label.anchor.set(0.5);
 	button.label = label; //  save reference to letter
@@ -126,7 +135,7 @@ function createBt(button, label_text, target_state, shape, iconImage) {
 		icon.anchor.set(0.5);
 		icon.height = button.height - iconMod;
 		icon.width = button.height - iconMod;
-		button.icon = icon;		
+		button.icon = icon;
 	}
 
 
@@ -145,7 +154,7 @@ function createBt(button, label_text, target_state, shape, iconImage) {
 		//button.alpha = 1;
 		button.label.tint = 0x000000;
 		// if(button.icon) button.icon.tint = 0x000000;
-		
+
 	}, this);
 	button.events.onInputOut.add(function() {
 		// button.tint = noColour;
@@ -161,30 +170,61 @@ function createBt(button, label_text, target_state, shape, iconImage) {
 	button.events.onInputDown.add(function() {
 		button.tint = 0x4ac7eb;
 	});
-	button.events.onInputUp.add(function() {		
+	button.events.onInputUp.add(function() {
 		button.tint = 0xffffff;
 		// button.alpha = 0;
 		// button.label.tint = 0xffffff;
-	});	
+	});
+
+	// to address all button elements use group 
+	btGroup = Climb.game.add.group();
+
+	btGroup.add(button);
+	btGroup.add(border);
+	btGroup.add(label);
+	// if (iconImage) btGroup.add(icon);
+
+	button.group = btGroup; // save a reference for later usage
 }
 
 function createCopyright() {
 
 	var st = Climb.game.state.getCurrentState().key,
-		style = copyright_style;
-	if(st === "Game"){		
+		style = copyright_style,
+		copyright_shift = 35;
+	if (st === "Game") {
 		style = copyright_style_dark;
+		copyright_shift = 10;
 	}
 
 	// add copyright text	
-	var c = Climb.game.add.text(Climb.game.width - 10, Climb.game.height, copyright_txt, style);
+	var c = Climb.game.add.text(Climb.game.width - copyright_shift, Climb.game.height - 3, copyright_txt, style);
 	c.anchor.set(1, 1);
 	c.fixedToCamera = true;
 
 	// release	
-	var release = Climb.game.add.text(10, Climb.game.height, release_txt, style);
-	release.anchor.set(0,1);
+	var release = Climb.game.add.text(10, Climb.game.height - 3, release_txt, style);
+	release.anchor.set(0, 1);
 	release.fixedToCamera = true;
+
+	createSoundScreenToggles();
+}
+
+function createSoundScreenToggles() {
+
+	// // soundBt
+	// var soundBt = Climb.game.add.sprite(Climb.game.width - 45, Climb.game.height - 15, "square");
+	// createBt(soundBt, "icon-note", false, "square-small");
+	// soundBt.events.onInputUp.add(function() {
+	// 	soundToggle();
+	// });
+
+	// fullscreenBt
+	var fullscreenBt = Climb.game.add.sprite(Climb.game.width - 15, Climb.game.height - 15, "square");
+	createBt(fullscreenBt, "icon-expand", false, "square-small");
+	fullscreenBt.events.onInputUp.add(function() {
+		fullscreenToggle();
+	});
 }
 
 function openInNewTab(url) {
