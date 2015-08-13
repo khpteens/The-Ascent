@@ -88,14 +88,6 @@ Climb.Preload.prototype = {
 		};
 		this.load.script('webfont', '//ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js');
 
-
-		// if (!window.AudioContext) {
-		// 	if (!window.webkitAudioContext) {
-		// 		alert('no audiocontext found');
-		// 	}
-		// 	window.AudioContext = window.webkitAudioContext;
-		// }
-
 		createStyles(); // set Title, body styles for project
 	},
 	create: function() {

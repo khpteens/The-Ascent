@@ -39,9 +39,7 @@ Climb.Boot.prototype = {
 
 		// enable to allow framerate testing
 		this.time.advancedTiming = true;
-
-		// physics system for movement
-		// this.game.physics.startSystem(Phaser.Physics.ARCADE);
+				
 
 		// Screen Transitions
 		// load transition plugin. Source is here https://github.com/aaccurso/phaser-state-transition-plugin
