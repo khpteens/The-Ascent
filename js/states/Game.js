@@ -11,7 +11,7 @@ var T_Key, E_Key, A_Key, M_Key, Left_Key, Right_Key;
 var T_button, E_button, A_button, M_button, toggleLR;
 
 // groups
-var climbers, platforms, ropes, optionsScreen, winMessage, userinterface, touchinterface, background;
+var climbers, platforms, ropes, optionsScreen, winMessage, userinterface, touchinterface, background, rope_group;
 
 // arrays
 var team = [];
@@ -37,6 +37,7 @@ var timeStart,
     timePaused;
 var pauseStart;
 var winText;
+var ropeArt = null;
 
 var o_camera,
     cameraDrag = 5,
@@ -81,7 +82,7 @@ Climb.Game.prototype = {
         camera_follow_team();
 
         createCopyright();
-        createSoundScreenToggles();
+        // createSoundScreenToggles();
     },
     update: function() { // Game logic, collision, movement, etc...
 
@@ -255,7 +256,7 @@ function createBackground() {
     background = Climb.game.add.group();
 
     var mountains = background.create(0, 0, "bg-mountains");
-    mountains.height = settings.HEIGHT; 
+    mountains.height = settings.HEIGHT;
     mountains.anchor.set(0.5, 0);
     background.fixedToCamera = true;
 }
@@ -279,7 +280,6 @@ function createPlatforms() {
     createPlatform(650, 900, 750, 1);
     createPlatform(800, 700, 600, 2);
     createPlatform(900, 400, 500, 3);
-    // createPlatform(1200, 500, 200, 2);
 
     topPlatform = platforms.children[5]; // 5
 
@@ -291,9 +291,7 @@ function createPlatform(x, y, width, hx) {
 
     var hc = 100,
         h = hx * 100,
-        // w = Climb.game.world.width - x,
         n = platforms.children.length,
-        // pY = platforms.children[n - 1].y - h;
 
         ledge = platforms.create(x, y, 'square');
 
@@ -303,7 +301,7 @@ function createPlatform(x, y, width, hx) {
     ledge.hx = hx;
     ledge.ropes = [];
     ledge.body.immovable = true;
-    ledge.tint = groundColour;
+    // ledge.tint = groundColour;
     ledge.alpha = 0; // hide platform
 }
 
@@ -396,9 +394,64 @@ function createRope(c) {
         rope.tint = 0x8B4513; // brown
         rope.width = ROPE_WIDTH;
         rope.height = c.height;
+        rope.climber = c;
+        rope.platform = p;
         c.rope = rope;
         c.platform.ropes.push(c);
+        rope.alpha = 0;    
+
+        beautifyRopes();          
     }
+}
+
+function beautifyRopes() {
+
+    if (ropeArt != null) {
+            ropeArt.destroy();
+            ropeArt = undefined;
+        }
+
+    if (ropes.children.length > 0) { // if any ropes then draw them
+
+        var r, c, p;
+
+        for (var i = 0, len = ropes.children.length; i < len; i++) { // loop through ropes
+
+            r = ropes.children[i];
+            c = r.climber;
+            p = c.platform;
+
+            rNum = p.ropes.length; 
+            // trace(p.ropes.children);
+            // if(p.ropes.children[0].platform.name == p.name){
+            //     trace("is first/only rope on platform");
+            // }           
+
+            var myRx, myRy,
+                cHandsX = c.x + 18,
+                cHandsY = c.y + c.height - 18;
+
+            myRy = p.y - 50 + rNum*100;            
+            ropeArt = Climb.game.add.graphics(0, 0);
+            ropeArt.lineStyle(3, 0xfc6744);
+            ropeArt.moveTo(cHandsX, cHandsY); // set start of rope in climber's hands
+
+            if (cHandsX < p.x - 4) {
+                ropeArt.lineTo(cHandsX, myRy);
+
+            } else {
+                myRx = p.x - 4;
+                ropeArt.lineTo(p.x - 4, p.y - 4);
+                ropeArt.lineTo(myRx, myRy);
+            }
+        }
+
+
+    } else {
+        // do nothing        
+    }
+
+
 }
 
 function rebuildRope(p) {
@@ -421,7 +474,7 @@ function rebuildRope(p) {
 
         r.x = p.x - ROPE_WIDTH * 2;
         r.y = firstRopeY + i * c.height;
-    }
+    }    
 }
 
 function deleteRope(c) {
@@ -447,6 +500,7 @@ function deleteRope(c) {
             rebuildRope(p);
         }
     }
+    beautifyRopes();
 }
 
 function createInputs() {
@@ -709,6 +763,7 @@ function updateClimber(c) {
 
         if (!c.moving && c.x < c.platform.x && c.rope === undefined) {
             createRope(c);
+            beautifyRopes();
         }
         Climb.game.physics.arcade.overlap(c, climbers, overlapClimbersKeyIsDown);
     }
@@ -718,15 +773,15 @@ function updateClimber(c) {
     updateClimberDisplay(c);
 }
 
-function updateClimberHoldingUpList(c){
+function updateClimberHoldingUpList(c) {
 
     for (var i = 0, len = c.holdingUp.length; i < len; i++) { // loop through climber's in "holdingUp" list
 
         var o = c.holdingUp[i];
         // check for x position overlap
-        if(o.x > c.x + c.width || o.x < c.x - c.width){ // if too far right or too far left then enable gravity
+        if (o.x > c.x + c.width || o.x < c.x - c.width) { // if too far right or too far left then enable gravity
             o.body.allowGravity = true; // enable gravity
-        }           
+        }
     }
 }
 
@@ -762,7 +817,7 @@ function updateClimberDisplay(c) {
     } else if (c.keyUp) {
 
         climbers.bringToTop(c);
-        
+
         c.animations.play('hop');
         c.animations.currentAnim.onComplete.addOnce(function() {
             c.frame = 1;
@@ -791,7 +846,7 @@ function overlapClimbersKeyUp(c, other) { // this function is triggered once, on
 
         c.holdingUp[i].body.allowGravity = true;
         other.body.velocity.y = -20; // short boost so climber can be held up by a different climber
-        other.moving = true;        
+        other.moving = true;
     }
     c.holdingUp = [];
 
@@ -800,14 +855,13 @@ function overlapClimbersKeyUp(c, other) { // this function is triggered once, on
         //  recieve a boost only from a stationary climber        
         if (!other.moving && other.keyDown && other.rope === undefined) { //  other is a stationary climber
 
-            if (c.moving && Math.abs(c.x - other.x) <= c.width/2 ) {
+            if (c.moving && Math.abs(c.x - other.x) <= c.width / 2) {
                 c.body.velocity.y = Y_CLIMB; // boost the climber
                 c.body.velocity.x = X_MOVE / 2;
             }
         }
 
-    } else {
-    }
+    } else {}
 }
 
 function overlapClimbersKeyIsDown(c, other) { //  triggered every frame that c.key.isDown
@@ -815,7 +869,7 @@ function overlapClimbersKeyIsDown(c, other) { //  triggered every frame that c.k
     //  control HELPER climber
     if (c !== other) { // avoid calculating collision with self
 
-        if (!c.moving && c.keyDown ) { //  if climber is stationary and their key is held down AND they are on a platform
+        if (!c.moving && c.keyDown) { //  if climber is stationary and their key is held down AND they are on a platform
 
             //  currently overlapping, 
             //  if the previous position was above

@@ -140,8 +140,12 @@ function createBt(button, label_text, target_state, shape, iconImage) {
 
 
 	if (target_state != false && target_state != undefined) {
-		button.events.onInputUp.add(function() {
-			Climb.game.stateTransition.to(target_state);
+		button.events.onInputUp.add(function() {			
+			if(!hasTouch){
+				Climb.game.stateTransition.to(target_state);
+			}else{
+				Climb.game.state.start(target_state);
+			}
 		}, this);
 	}
 	button.events.onInputOver.add(function() {
