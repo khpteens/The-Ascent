@@ -10,6 +10,8 @@ var timer;
 var T_Key, E_Key, A_Key, M_Key, Left_Key, Right_Key;
 var T_button, E_button, A_button, M_button, toggleLR;
 
+var ropeArt = null;
+
 // groups
 var climbers, platforms, ropes, optionsScreen, winMessage, userinterface, touchinterface, background, rope_group;
 
@@ -37,7 +39,6 @@ var timeStart,
     timePaused;
 var pauseStart;
 var winText;
-var ropeArt = null;
 
 var o_camera,
     cameraDrag = 5,
@@ -82,7 +83,6 @@ Climb.Game.prototype = {
         camera_follow_team();
 
         createCopyright();
-        // createSoundScreenToggles();
     },
     update: function() { // Game logic, collision, movement, etc...
 
@@ -93,7 +93,7 @@ Climb.Game.prototype = {
 
             // camera related
             camera_center();
-            camera_follow_team();            
+            camera_follow_team();
 
             if (!gameComplete) {
                 gameCheckWin();
@@ -121,7 +121,7 @@ function createOptionsScreen() {
     // // copyright text    
     // var optionC = Climb.game.add.text(settings.WIDTH - 10, settings.HEIGHT, copyright_txt, copyright_style);
     // optionC.anchor.set(1, 1);
-    // optionsScreen.add(optionC);
+    // optionsScreen.add(optionC); 
 
     // "Options"
     text = "Options",
@@ -398,18 +398,18 @@ function createRope(c) {
         rope.platform = p;
         c.rope = rope;
         c.platform.ropes.push(c);
-        rope.alpha = 0;    
+        rope.alpha = 0;
 
-        beautifyRopes();          
+        beautifyRopes();
     }
 }
 
 function beautifyRopes() {
 
     if (ropeArt != null) {
-            ropeArt.destroy();
-            ropeArt = undefined;
-        }
+        ropeArt.destroy();
+        ropeArt = undefined;
+    }
 
     if (ropes.children.length > 0) { // if any ropes then draw them
 
@@ -419,30 +419,29 @@ function beautifyRopes() {
 
             r = ropes.children[i];
             c = r.climber;
-            p = c.platform;
+            p = c.platform; // get current platform
 
-            rNum = p.ropes.length; 
-            // trace(p.ropes.children);
-            // if(p.ropes.children[0].platform.name == p.name){
-            //     trace("is first/only rope on platform");
-            // }           
+            rNum = p.ropes.length; // # of ropes on current platform
 
-            var myRx, myRy,
-                cHandsX = c.x + 18,
-                cHandsY = c.y + c.height - 18;
+            if (Math.round(r.climber.rope.y - p.ropes[0].y) === 50) { // draw rope only once per platfom
 
-            myRy = p.y - 50 + rNum*100;            
-            ropeArt = Climb.game.add.graphics(0, 0);
-            ropeArt.lineStyle(3, 0xfc6744);
-            ropeArt.moveTo(cHandsX, cHandsY); // set start of rope in climber's hands
+                var myRx,
+                    myRy = p.y - 50 + rNum * 100,
+                    cHandsX = p.ropes[0].x + 21, //c.x + 18,
+                    cHandsY = c.y + c.height - 18;
 
-            if (cHandsX < p.x - 4) {
-                ropeArt.lineTo(cHandsX, myRy);
+                ropeArt = Climb.game.add.graphics(0, 0);
+                ropeArt.lineStyle(4, 0x8B4513); // thickness, hex colour of rope
+                ropeArt.moveTo(cHandsX, cHandsY); // set start of rope in climber's hands
 
-            } else {
-                myRx = p.x - 4;
-                ropeArt.lineTo(p.x - 4, p.y - 4);
-                ropeArt.lineTo(myRx, myRy);
+                if (cHandsX < p.x - 4) {
+                    ropeArt.lineTo(cHandsX, myRy);
+
+                } else {
+                    myRx = p.x - 4;
+                    ropeArt.lineTo(p.x - 4, p.y - 4);
+                    ropeArt.lineTo(myRx, myRy);
+                }
             }
         }
 
@@ -450,8 +449,6 @@ function beautifyRopes() {
     } else {
         // do nothing        
     }
-
-
 }
 
 function rebuildRope(p) {
@@ -474,7 +471,7 @@ function rebuildRope(p) {
 
         r.x = p.x - ROPE_WIDTH * 2;
         r.y = firstRopeY + i * c.height;
-    }    
+    }
 }
 
 function deleteRope(c) {
@@ -946,6 +943,9 @@ function gameCheckWin() {
 }
 
 function gameWin() {
+
+    ropeArt.destroy();
+    ropeArt = undefined;
 
     // show win message with continue button
     winMessage.visible = true;

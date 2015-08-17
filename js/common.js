@@ -197,8 +197,7 @@ function createCopyright() {
 		style = copyright_style,
 		copyright_shift = 35;
 	if (st === "Game") {
-		style = copyright_style_dark;
-		copyright_shift = 10;
+		style = copyright_style_dark;		
 	}
 
 	// add copyright text	
@@ -226,9 +225,10 @@ function createSoundScreenToggles() {
 	// fullscreenBt
 	var fullscreenBt = Climb.game.add.sprite(Climb.game.width - 15, Climb.game.height - 15, "square");
 	createBt(fullscreenBt, "icon-expand", false, "square-small");
+	fullscreenBt.group.fixedToCamera = true;
 	fullscreenBt.events.onInputUp.add(function() {
 		fullscreenToggle();
-	});
+	});	
 }
 
 function openInNewTab(url) {
