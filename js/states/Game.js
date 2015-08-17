@@ -15,7 +15,7 @@ var ropeArt = null;
 // groups
 var climbers, platforms, ropes, optionsScreen, winMessage, userinterface, touchinterface, background, rope_group, pads;
 
-var tPad, ePad, aPad, mPad;
+var tPad, ePad, aPad, mPad, tPad2, ePad2, aPad2, mPad2;
 
 // arrays
 var team = [];
@@ -74,7 +74,7 @@ Climb.Game.prototype = {
         this.game.physics.startSystem(Phaser.Physics.ARCADE); //  Arcade Physics system GO!!!
 
         createBackground();
-        createPlatforms();        
+        createPlatforms();
         createPads();
         createClimbers();
         createRopes();
@@ -92,7 +92,7 @@ Climb.Game.prototype = {
         if (!gamePaused) {
 
             updateClimbers();
-            updateTimer();            
+            updateTimer();
 
             // camera related
             camera_center();
@@ -110,10 +110,10 @@ function createPads() {
     pads = Climb.game.add.group();
     pads.enableBody = true;
 
-    tPad = Climb.game.add.sprite(40, 1096, "fpo-square");     
+    tPad = Climb.game.add.sprite(40, 1096, "fpo-square");
     createPad(tPad, "T", 0xfc6744);
 
-    ePad = Climb.game.add.sprite(110, 1096, "fpo-square");    
+    ePad = Climb.game.add.sprite(110, 1096, "fpo-square");
     createPad(ePad, "E", 0x4ac7eb);
 
     aPad = Climb.game.add.sprite(180, 1096, "fpo-square");
@@ -121,6 +121,18 @@ function createPads() {
 
     mPad = Climb.game.add.sprite(250, 1096, "fpo-square");
     createPad(mPad, "M", 0x938884);
+
+    tPad2 = Climb.game.add.sprite(940, 396, "fpo-square");
+    createPad(tPad2, "T", 0xfc6744);
+
+    ePad2 = Climb.game.add.sprite(1010, 396, "fpo-square");
+    createPad(ePad2, "E", 0x4ac7eb);
+
+    aPad2 = Climb.game.add.sprite(1080, 396, "fpo-square");
+    createPad(aPad2, "A", 0xc1cd23);
+
+    mPad2 = Climb.game.add.sprite(1150, 396, "fpo-square");
+    createPad(mPad2, "M", 0x938884);
 }
 
 function createPad(p, n, t) {
@@ -344,25 +356,25 @@ function createClimbers() {
 
     var startX = Climb.game.world.height - 300;
 
-    T = climbers.create(40-36, startX, 'av-t');
+    T = climbers.create(40 - 36, startX, 'av-t');
     T.key = T_Key;
     T.button = T_button;
     T.name = "T";
     createClimber(T);
 
-    E = climbers.create(110-36, startX, 'av-e');
+    E = climbers.create(110 - 36, startX, 'av-e');
     E.key = E_Key;
     E.button = E_button;
     E.name = "E";
     createClimber(E)
 
-    A = climbers.create(180-36, startX, 'av-a');
+    A = climbers.create(180 - 36, startX, 'av-a');
     A.key = A_Key;
     A.button = A_button;
     A.name = "A";
     createClimber(A);
 
-    M = climbers.create(250-36, startX, 'av-m');
+    M = climbers.create(250 - 36, startX, 'av-m');
     M.key = M_Key;
     M.button = M_button;
     M.name = "M";
@@ -804,20 +816,42 @@ function updateClimber(c) {
     updateClimberDisplay(c);
 }
 
-function updatePads(){
+function updatePads() {
 
-    Climb.game.physics.arcade.overlap(T, tPad, function(){
-        if(!T.moving) T.frame = 0;
-    }); 
-    Climb.game.physics.arcade.overlap(E, ePad, function(){
-        if(!E.moving) E.frame = 0;
-    }); 
-    Climb.game.physics.arcade.overlap(A, aPad, function(){
-        if(!A.moving) A.frame = 0;
-    }); 
-    Climb.game.physics.arcade.overlap(M, mPad, function(){
-        if(!M.moving) M.frame = 0;
-    });    
+    if (!T.moving) {
+        Climb.game.physics.arcade.overlap(T, tPad, function() {
+            T.frame = 0;
+        });
+        Climb.game.physics.arcade.overlap(T, tPad2, function() {
+            T.frame = 0;
+        });
+    }
+
+    if (!E.moving) {
+        Climb.game.physics.arcade.overlap(E, ePad, function() {
+            E.frame = 0;
+        });
+        Climb.game.physics.arcade.overlap(E, ePad2, function() {
+            E.frame = 0;
+        });
+    }
+    if (!A.moving) {
+        Climb.game.physics.arcade.overlap(A, aPad, function() {
+            A.frame = 0;
+        });
+        Climb.game.physics.arcade.overlap(A, aPad2, function() {
+            A.frame = 0;
+        });
+    }
+
+    if (!M.moving) {
+        Climb.game.physics.arcade.overlap(M, mPad, function() {
+            M.frame = 0;
+        });
+        Climb.game.physics.arcade.overlap(M, mPad2, function() {
+            M.frame = 0;
+        });
+    }
 }
 
 function updateClimberHoldingUpList(c) {
@@ -985,6 +1019,10 @@ function gameCheckWin() {
         if (climbers.children[i].platform != topPlatform) {
             win = false;
         }
+
+        if (T.frame != 0 || E.frame != 0 || A.frame != 0 || M.frame != 0) {
+            win = false;
+        }
     }
 
     if (win) {
@@ -994,8 +1032,10 @@ function gameCheckWin() {
 
 function gameWin() {
 
-    ropeArt.destroy();
-    ropeArt = undefined;
+    if (ropeArt != null) {
+        ropeArt.destroy();
+        ropeArt = undefined;
+    }
 
     // show win message with continue button
     winMessage.visible = true;

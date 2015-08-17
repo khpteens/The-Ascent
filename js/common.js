@@ -213,6 +213,7 @@ function createSoundScreenToggles() {
 	// soundBt
 	var soundBt = Climb.game.add.sprite(Climb.game.width - 15, Climb.game.height - 45, "square");
 	createBt(soundBt, "icon-screenshot", false, "square-small");
+	soundBt.group.fixedToCamera = true;
 	soundBt.events.onInputUp.add(function() {		
 		createScreenshot();
 	});
