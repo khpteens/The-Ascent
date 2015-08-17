@@ -3,10 +3,11 @@
 // VARIABLES ***********************************************
 
 var settings = {
-	"WIDTH": 500,
-	"HEIGHT": undefined,
+	"WIDTH": 450,
+	"HEIGHT": 600,
 	"RATIO": window.innerHeight / window.innerWidth,
 	"RATIO_MIN": 1.2,
+	"RATIO_MAX": 1.4,
 
 	"PAUSED": false,
 
@@ -23,12 +24,6 @@ var settings = {
 	"FRAME_WIDTH": Number(window.getComputedStyle(document.querySelector('#game')).width.replace(/\D/g, '')),
 	"FRAME_HEIGHT": Number(window.getComputedStyle(document.querySelector('#game')).height.replace(/\D/g, ''))
 };
-
-if (settings.RATIO <= settings.RATIO_MIN) {
-	settings.RATIO = settings.RATIO_MIN; // widest is square, no limit to height
-}
-
-settings.HEIGHT = settings.RATIO * settings.WIDTH;
 
 var copyright_txt = "© BroTalk",
 	release_txt = "BETA.Aug.12.2015";
@@ -215,12 +210,12 @@ function createCopyright() {
 
 function createSoundScreenToggles() {
 
-	// // soundBt
-	// var soundBt = Climb.game.add.sprite(Climb.game.width - 45, Climb.game.height - 15, "square");
-	// createBt(soundBt, "icon-note", false, "square-small");
-	// soundBt.events.onInputUp.add(function() {
-	// 	soundToggle();
-	// });
+	// soundBt
+	var soundBt = Climb.game.add.sprite(Climb.game.width - 15, Climb.game.height - 45, "square");
+	createBt(soundBt, "icon-screenshot", false, "square-small");
+	soundBt.events.onInputUp.add(function() {		
+		createScreenshot();
+	});
 
 	// fullscreenBt
 	var fullscreenBt = Climb.game.add.sprite(Climb.game.width - 15, Climb.game.height - 15, "square");
@@ -271,3 +266,8 @@ function fullscreenToggle() {
 		settings.FRAME.style.height = settings.FRAME_HEIGHT;
 	}
 }
+
+function createScreenshot() {
+	var url = document.getElementById("game").childNodes[0].toDataURL('png');
+	openInNewTab(url);    
+};

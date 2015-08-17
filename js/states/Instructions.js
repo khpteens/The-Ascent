@@ -16,18 +16,18 @@ Climb.Instructions.prototype = {
 
 		// start game text
 		var text = "How to play";
-		var t = this.game.add.text(this.game.width / 2, this.game.height / 2 - 220, text, h1_style);
+		var t = this.game.add.text(this.game.width / 2, this.game.height / 2 - 230, text, h1_style);
 		t.anchor.set(0.5);
 
 		createInstructions();
 
 		// create buttons
 		// Continue
-		var continueBt = Climb.game.add.sprite(Climb.game.width / 2, Climb.game.height / 2 + 170, "square");
+		var continueBt = Climb.game.add.sprite(Climb.game.width / 2, Climb.game.height / 2 + 160, "square");
 		createBt(continueBt, "Play game", "Game");	  
 
 		// Back button
-		var backBt = Climb.game.add.sprite(Climb.game.width / 2, Climb.game.height / 2 + 230, "square");
+		var backBt = Climb.game.add.sprite(Climb.game.width / 2, Climb.game.height / 2 + 220, "square");
 		createBt(backBt, "Main menu", "MainMenu");
 	},
 	update: function() {}
@@ -43,5 +43,5 @@ function createInstructions() {
 	text += "3. Your climbers can lift and pull\neach other up.\n\n";
 	text += "4. Reach the summit to win.";
 
-	var instructions = Climb.game.add.text(50, Climb.game.height / 2 - 160, text, p_style);
+	var instructions = Climb.game.add.text(50, Climb.game.height / 2 - 170, text, p_style);
 }

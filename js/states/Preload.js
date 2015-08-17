@@ -59,6 +59,7 @@ Climb.Preload.prototype = {
 		this.load.image('icon-speaker', 'assets/img/i/speaker.png');
 		this.load.image('icon-expand', 'assets/img/i/expand.png');
 		this.load.image('icon-contract', 'assets/img/i/contract.png');
+		this.load.image('icon-screenshot', 'assets/img/i/screenshot.png');
 
 		// sprites
 		this.load.image('bg-mountains', 'assets/img/bg-mountains.png');
@@ -126,11 +127,11 @@ function createStyles() {
 		align: "center"
 	};
 	p_style = {
-		font: "300 20px Open Sans",
+		font: "300 18px Open Sans",
 		fill: white
 	};
 	p_style_center = {
-		font: "300 20px Open Sans",
+		font: "300 18px Open Sans",
 		fill: white,
 		align: "center"
 	};

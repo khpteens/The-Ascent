@@ -26,7 +26,7 @@ Climb.MainMenu.prototype = {
 		// Play now 
 		var PlayBt = this.game.add.sprite(this.game.width / 2, this.game.height / 2 + 120, "square");
 		createBt(PlayBt, "Start", "Instructions");
-		
+
 	},
 	update: function() {}
 };

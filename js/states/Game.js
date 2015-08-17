@@ -13,7 +13,9 @@ var T_button, E_button, A_button, M_button, toggleLR;
 var ropeArt = null;
 
 // groups
-var climbers, platforms, ropes, optionsScreen, winMessage, userinterface, touchinterface, background, rope_group;
+var climbers, platforms, ropes, optionsScreen, winMessage, userinterface, touchinterface, background, rope_group, pads;
+
+var tPad, ePad, aPad, mPad;
 
 // arrays
 var team = [];
@@ -72,7 +74,8 @@ Climb.Game.prototype = {
         this.game.physics.startSystem(Phaser.Physics.ARCADE); //  Arcade Physics system GO!!!
 
         createBackground();
-        createPlatforms();
+        createPlatforms();        
+        createPads();
         createClimbers();
         createRopes();
         createWinText();
@@ -89,7 +92,7 @@ Climb.Game.prototype = {
         if (!gamePaused) {
 
             updateClimbers();
-            updateTimer();
+            updateTimer();            
 
             // camera related
             camera_center();
@@ -101,6 +104,35 @@ Climb.Game.prototype = {
         }
     }
 };
+
+function createPads() {
+
+    pads = Climb.game.add.group();
+    pads.enableBody = true;
+
+    tPad = Climb.game.add.sprite(40, 1096, "fpo-square");     
+    createPad(tPad, "T", 0xfc6744);
+
+    ePad = Climb.game.add.sprite(110, 1096, "fpo-square");    
+    createPad(ePad, "E", 0x4ac7eb);
+
+    aPad = Climb.game.add.sprite(180, 1096, "fpo-square");
+    createPad(aPad, "A", 0xc1cd23);
+
+    mPad = Climb.game.add.sprite(250, 1096, "fpo-square");
+    createPad(mPad, "M", 0x938884);
+}
+
+function createPad(p, n, t) {
+
+    p.width = 69;
+    p.height = 10;
+    p.name = n;
+    p.tint = t;
+    p.anchor.set(0.5, 1);
+    p.name = String(p);
+    pads.add(p);
+}
 
 function createOptionsScreen() {
 
@@ -312,25 +344,25 @@ function createClimbers() {
 
     var startX = Climb.game.world.height - 300;
 
-    T = climbers.create(25, startX, 'av-t');
+    T = climbers.create(40-36, startX, 'av-t');
     T.key = T_Key;
     T.button = T_button;
     T.name = "T";
     createClimber(T);
 
-    E = climbers.create(76, startX, 'av-e');
+    E = climbers.create(110-36, startX, 'av-e');
     E.key = E_Key;
     E.button = E_button;
     E.name = "E";
     createClimber(E)
 
-    A = climbers.create(127, startX, 'av-a');
+    A = climbers.create(180-36, startX, 'av-a');
     A.key = A_Key;
     A.button = A_button;
     A.name = "A";
     createClimber(A);
 
-    M = climbers.create(178, startX, 'av-m');
+    M = climbers.create(250-36, startX, 'av-m');
     M.key = M_Key;
     M.button = M_button;
     M.name = "M";
@@ -714,6 +746,8 @@ function updateClimbers() {
     for (var i = 0, len = team.length; i < len; i++) {
         updateClimber(team[i]);
     }
+
+    updatePads();
 }
 
 function updateClimber(c) {
@@ -768,6 +802,22 @@ function updateClimber(c) {
     updateClimberHoldingUpList(c);
 
     updateClimberDisplay(c);
+}
+
+function updatePads(){
+
+    Climb.game.physics.arcade.overlap(T, tPad, function(){
+        if(!T.moving) T.frame = 0;
+    }); 
+    Climb.game.physics.arcade.overlap(E, ePad, function(){
+        if(!E.moving) E.frame = 0;
+    }); 
+    Climb.game.physics.arcade.overlap(A, aPad, function(){
+        if(!A.moving) A.frame = 0;
+    }); 
+    Climb.game.physics.arcade.overlap(M, mPad, function(){
+        if(!M.moving) M.frame = 0;
+    });    
 }
 
 function updateClimberHoldingUpList(c) {
@@ -903,16 +953,16 @@ function gameRestart() {
     Climb.game.camera.x = 0;
     Climb.game.camera.y = Climb.game.world.height - settings.HEIGHT;
 
-    T.x = T.lastX = 25;
+    T.x = T.lastX = 40 - 36;
     T.y = T.lastY = Climb.game.world.height - 300;
     T.platform = 'ground';
-    E.x = E.lastX = 76;
+    E.x = E.lastX = 110 - 36;
     E.y = E.lastY = Climb.game.world.height - 300;
     E.platform = 'ground';
-    A.x = A.lastX = 127;
+    A.x = A.lastX = 180 - 36;
     A.y = A.lastY = Climb.game.world.height - 300;
     A.platform = 'ground';
-    M.x = M.lastX = 178;
+    M.x = M.lastX = 250 - 36;
     M.y = M.lastY = Climb.game.world.height - 300;
     M.platform = 'ground';
 
