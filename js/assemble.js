@@ -7,7 +7,7 @@
 // js load order
 $LAB
 	.setOptions({AlwaysPreserveOrder: true})
-	.script("https://cdnjs.cloudflare.com/ajax/libs/phaser/2.3.0/phaser.min.js")
+	.script("https://cdnjs.cloudflare.com/ajax/libs/phaser/2.3.0/phaser.min.js")	
 	.script("js/plugins/phaser-state-transition-plugin.min.js")
 	.script("js/plugins/phaser-save-cpu-plugin.min.js")
 	.script("js/plugins/google-analytics.js")	

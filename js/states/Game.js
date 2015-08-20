@@ -2,9 +2,10 @@
 var Climb = Climb || {};
 
 // sprites
-var T, E, A, M; //  climber
-var tT, tE, tA, tM; //  climber letters
-var timer;
+var T, E, A, M, //  climber
+    tT, tE, tA, tM, //  climber letters
+    timer,
+    goat;
 
 // inputs
 var T_Key, E_Key, A_Key, M_Key, Left_Key, Right_Key;
@@ -13,7 +14,7 @@ var T_button, E_button, A_button, M_button, toggleLR;
 var ropeArt = null;
 
 // groups
-var climbers, platforms, ropes, optionsScreen, winMessage, userinterface, touchinterface, background, rope_group, pads;
+var climbers, platforms, ropes, optionsScreen, winMessage, userinterface, touchinterface, background, rope_group, pads, goats;
 
 var tPad, ePad, aPad, mPad, tPad2, ePad2, aPad2, mPad2;
 
@@ -27,6 +28,7 @@ var X_MOVE = 110;
 var X_MOVE_EDGE = X_MOVE / 2;
 var Y_CLIMB = -80;
 var Y_HOP = -25;
+var goat_respawn = true;
 
 var ROPE_WIDTH = 5;
 
@@ -78,8 +80,11 @@ Climb.Game.prototype = {
         createPads();
         createClimbers();
         createRopes();
+        create_goats();
+
         createWinText();
         createTimer();
+
         createOptionsScreen();
 
         camera_center();
@@ -93,6 +98,7 @@ Climb.Game.prototype = {
 
             updateClimbers();
             updateTimer();
+            update_goats();
 
             // camera related
             camera_center();
@@ -105,11 +111,107 @@ Climb.Game.prototype = {
     }
 };
 
+function create_goats() {
+
+    goats = Climb.game.add.group();
+
+    var gNum = 1;
+    for (var i = 0; i < gNum; i++) {
+        create_goat(i);
+    }
+}
+
+function create_goat(i) {
+
+    var g = Climb.game.add.sprite(50, 0, "fpo-circle");
+    g.anchor.set(0, 1);
+    g.width = g.height = 10;
+    g.alpha = 0;
+
+    g.art = Climb.game.add.sprite(g.x, g.y, "goat");
+    g.art.anchor.set(0.5, 1);
+    g.art.width = g.art.height = 60;
+
+    // physics
+    Climb.game.physics.arcade.enable([g]);
+    g.body.gravity.y = GRAVITY;
+    g.body.bounce.set(0.2);
+
+    goats.add(g);
+
+    var randomDelay = Math.round(Math.random() * 1200);
+    setTimeout(function() {
+        reset_goat(g);
+    }, randomDelay);
+}
+
+function update_goats() {
+    for (var i = 0, len = goats.length; i < len; i++) {
+        update_goat(goats.children[i]);
+    }
+}
+
+function update_goat(g) {
+
+    g.art.x = g.x;
+    g.art.y = g.y;
+
+    if (g.lastX != undefined && g.lastX == g.x && g.grounded) {
+        g.body.velocity.y = -150;
+    }
+    g.lastX = g.x;
+    g.grounded = false;
+
+    Climb.game.physics.arcade.collide(goats, platforms, update_goat_platform, null, this); //  Collide with platforms    
+}
+
+function update_goat_platform(g, p) {
+
+    g.grounded = true;
+
+    if (g.x > 1400 || g.x < -100) {
+        reset_goat(g);
+    } else {
+
+        if (Math.abs(g.body.velocity.x) < 30) g.body.velocity.x += g.vX; // max at 
+        g.body.velocity.y += g.vY;
+    }
+}
+
+function reset_goat(g) {
+
+    if (goat_respawn) {
+        g.x = Math.round(Math.random() * 1000) + 200; // starting X position between 200 and 1200   
+        g.y = 0;
+
+        var randPosNeg = Math.round(Math.random()) * 2 - 1;
+        g.art.width = Math.abs(g.art.width) * randPosNeg * (-1);
+        g.vX = randPosNeg * 2;
+        g.vY = -3;
+
+        g.body.velocity.x = 0;
+        g.body.velocity.y = 0;
+    }
+}
+
+function clear_goats() {
+    var len = goats.length;
+    for (var i = len-1; i >= 0 ; i--) {
+    
+        if(goats.children[i] != null){ // destroy from last to first elements in array
+            goats.children[i].art.destroy();             
+            goats.children[i].destroy();                     
+        }
+    }    
+    goats = [];
+}
+
 function createPads() {
 
     pads = Climb.game.add.group();
     pads.enableBody = true;
 
+    // starting pads
     tPad = Climb.game.add.sprite(40, 1096, "fpo-square");
     createPad(tPad, "T", 0xfc6744);
 
@@ -122,16 +224,17 @@ function createPads() {
     mPad = Climb.game.add.sprite(250, 1096, "fpo-square");
     createPad(mPad, "M", 0x938884);
 
-    tPad2 = Climb.game.add.sprite(940, 396, "fpo-square");
+    // ending pads
+    tPad2 = Climb.game.add.sprite(1000, 396, "fpo-square");
     createPad(tPad2, "T", 0xfc6744);
 
-    ePad2 = Climb.game.add.sprite(1010, 396, "fpo-square");
+    ePad2 = Climb.game.add.sprite(1070, 396, "fpo-square");
     createPad(ePad2, "E", 0x4ac7eb);
 
-    aPad2 = Climb.game.add.sprite(1080, 396, "fpo-square");
+    aPad2 = Climb.game.add.sprite(1140, 396, "fpo-square");
     createPad(aPad2, "A", 0xc1cd23);
 
-    mPad2 = Climb.game.add.sprite(1150, 396, "fpo-square");
+    mPad2 = Climb.game.add.sprite(1210, 396, "fpo-square");
     createPad(mPad2, "M", 0x938884);
 }
 
@@ -161,11 +264,6 @@ function createOptionsScreen() {
     optionBg.alpha = 0.9;
     optionBg.inputEnabled = true;
     optionsScreen.add(optionBg);
-
-    // // copyright text    
-    // var optionC = Climb.game.add.text(settings.WIDTH - 10, settings.HEIGHT, copyright_txt, copyright_style);
-    // optionC.anchor.set(1, 1);
-    // optionsScreen.add(optionC); 
 
     // "Options"
     text = "Options",
@@ -296,6 +394,7 @@ function createWinText() {
 }
 
 function createBackground() {
+
     Climb.game.stage.backgroundColor = '#4ac7eb';
     background = Climb.game.add.group();
 
@@ -311,8 +410,8 @@ function createPlatforms() {
     platforms.enableBody = true;
 
     // ground
-    var ground = platforms.create(0, Climb.game.world.height - 100, 'square'); // Here we create the ground.
-    ground.width = Climb.game.world.width;
+    var ground = platforms.create(-100, Climb.game.world.height - 100, 'square'); // Here we create the ground.
+    ground.width = Climb.game.world.width + 200;
     ground.height = 100;
     ground.body.immovable = true;
     ground.tint = groundColour;
@@ -345,8 +444,7 @@ function createPlatform(x, y, width, hx) {
     ledge.hx = hx;
     ledge.ropes = [];
     ledge.body.immovable = true;
-    // ledge.tint = groundColour;
-    ledge.alpha = 0; // hide platform
+    ledge.alpha = 0; // hide platform, will show only artwork for platforms
 }
 
 function createClimbers() {
@@ -393,7 +491,7 @@ function createClimber(c) {
     c.tint = defaultColour;
 
     //  climber flags
-    c.platform;
+    c.platform = platforms.children[0];
     c.rope;
     c.moving = false;
     c.lastX = c.x;
@@ -610,17 +708,13 @@ function createInputButtons() {
     toggleLR = Climb.game.add.sprite(Climb.game.width - 89, 29, "square");
     createBt(toggleLR, "icon-walk-right", false, "circle");
     toggleLR.events.onInputUp.add(toggleDirection, this);
-    userinterface.add(toggleLR);
-    userinterface.add(toggleLR.label);
-    userinterface.add(toggleLR.border);
+    userinterface.add(toggleLR.group);
 
     // options button
     optionsBt = Climb.game.add.sprite(Climb.game.width - 29, 29, "square");
     createBt(optionsBt, "icon-menu", false, "circle");
     optionsBt.events.onInputUp.add(optionsShow, this);
-    userinterface.add(optionsBt);
-    userinterface.add(optionsBt.label);
-    userinterface.add(optionsBt.border);
+    userinterface.add(optionsBt.group);
 
     if (!Climb.game.device.touch) {
         touchinterface.visible = false;
@@ -758,8 +852,6 @@ function updateClimbers() {
     for (var i = 0, len = team.length; i < len; i++) {
         updateClimber(team[i]);
     }
-
-    updatePads();
 }
 
 function updateClimber(c) {
@@ -782,6 +874,7 @@ function updateClimber(c) {
         c.moving = true;
     } else {
         c.moving = false;
+        updatePads();
     }
 
     // input
@@ -906,7 +999,7 @@ function updateClimberDisplay(c) {
         // if (c.frame !== 1) c.frame = 1;
         // if (c.tint !== defaultColour) c.tint = defaultColour;
 
-        c.keyUp = false; // fire keyUp actions only once.
+        c.keyUp = false; // fire keyUp actions only once.        
     }
 }
 
@@ -981,6 +1074,9 @@ function overlapRope(c, rope) {
 
 function gameRestart() {
 
+    clear_goats();
+    create_goats();
+
     winText.visible = false;
     if (Climb.game.device.touch) touchinterface.visible = true; // show touch interface if hasTouch    
 
@@ -1000,6 +1096,7 @@ function gameRestart() {
     M.y = M.lastY = Climb.game.world.height - 300;
     M.platform = 'ground';
 
+    userinterface.visible = true;
     toggleDirectionReset();
 
     gameStarted = false;
@@ -1036,10 +1133,13 @@ function gameWin() {
         ropeArt.destroy();
         ropeArt = undefined;
     }
+    clear_goats();
 
     // show win message with continue button
     winMessage.visible = true;
     if (touchinterface.visible) touchinterface.visible = false;
+    userinterface.visible = false;
+
     gameComplete = true;
 
     if (Number(currentTime) <= bestTime || bestTime == null) {

@@ -24,7 +24,7 @@ Climb.Preload.prototype = {
 
 		createBG(0x000000);
 
-		hasTouch = this.game.device.touch;	
+		hasTouch = this.game.device.touch;
 
 		// show logo in loading screen
 		this.splash = this.add.sprite(this.game.world.centerX, this.game.world.centerY, 'logo');
@@ -45,7 +45,11 @@ Climb.Preload.prototype = {
 		this.load.image('circle', 'assets/img/white-circle.png');
 
 		// wordmark
-		this.load.image('wordmark', 'assets/img/wordmark.png');		
+		this.load.image('wordmark', 'assets/img/wordmark.png');
+
+		// instructions
+		this.load.image('inst-rope', 'assets/img/instructions-rope.png');
+		this.load.image('inst-stack', 'assets/img/instructions-stack.png');
 
 		// icons 
 		this.load.image('icon-walk-right', 'assets/img/i/walk-right.png');
@@ -53,7 +57,7 @@ Climb.Preload.prototype = {
 		this.load.image('icon-overflow', 'assets/img/i/overflow.png');
 		this.load.image('icon-x', 'assets/img/i/x.png');
 		this.load.image('icon-refresh', 'assets/img/i/refresh.png');
-		this.load.image('icon-phone', 'assets/img/i/phone.png');	
+		this.load.image('icon-phone', 'assets/img/i/phone.png');
 		this.load.image('icon-chat', 'assets/img/i/chat.png');
 		this.load.image('icon-note', 'assets/img/i/note.png');
 		this.load.image('icon-speaker', 'assets/img/i/speaker.png');
@@ -64,11 +68,17 @@ Climb.Preload.prototype = {
 		// sprites
 		this.load.image('bg-mountains', 'assets/img/bg-mountains.png');
 		this.load.image('fg-mountains', 'assets/img/fg-mountain.png');
+		this.load.image('goat', 'assets/img/goat.png');
 
 		this.load.spritesheet('av-t', 'assets/img/av-t.png', 69, 100, 13); // 101	
 		this.load.spritesheet('av-e', 'assets/img/av-e.png', 72, 100, 13); // 102
 		this.load.spritesheet('av-a', 'assets/img/av-a.png', 74, 100, 13); // 101
 		this.load.spritesheet('av-m', 'assets/img/av-m.png', 73, 100, 13); // 102
+
+		// this.load.spritesheet('av-t', 'assets/img/av-n.png', 69, 100, 13); // 101	
+		// this.load.spritesheet('av-e', 'assets/img/av-o.png', 74, 100, 13); // 102
+		// this.load.spritesheet('av-a', 'assets/img/av-u.png', 72, 100, 13); // 101
+		// this.load.spritesheet('av-m', 'assets/img/av-s.png', 72, 100, 13); // 102
 
 		// Audio        
 		//this.load.audio('hit1', 'assets/audio/bat_hit_ball.mp3');		
@@ -87,7 +97,7 @@ Climb.Preload.prototype = {
 				families: ['Open+Sans:300,400,700:latin']
 			}
 		};
-		this.load.script('webfont', '//ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js');
+		this.load.script('webfont', '//ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js');		
 
 		createStyles(); // set Title, body styles for project
 	},
@@ -96,7 +106,7 @@ Climb.Preload.prototype = {
 	}
 };
 
-function createText(){
+function createText() {
 
 	// do nothing
 }

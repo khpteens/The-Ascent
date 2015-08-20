@@ -37,11 +37,17 @@ function createInstructions() {
 
 	// create and add text sprite telling the player they have won    
 
-	var text = "1. Tap the T, E, A & M keys on your keyboard.\n\n";
-	if (hasTouch) text = "1. Tap the T, E, A & M buttons on the screen.\n\n";
-	text += "2. Tap & hold letters to help your climbers\nreach the peak.\n\n";
-	text += "3. Your climbers can lift and pull\neach other up.\n\n";
+	var text = "1. Tap the T, E, A & M\nkeys on your keyboard.\n\n";
+	if (hasTouch) text = "1. Tap the T, E, A & M\nbuttons on the screen.\n\n";
+	text += "2. Tap & hold letters to help\nyour climbers reach the peak.\n\n";
+	text += "3. Your climbers can lift\nand pull each other up.\n\n";
 	text += "4. Reach the summit to win.";
 
-	var instructions = Climb.game.add.text(50, Climb.game.height / 2 - 170, text, p_style);
+	var instructions = Climb.game.add.text(175, Climb.game.height / 2 - 175, text, p_style);
+
+	var rope_img = Climb.game.add.sprite(35, Climb.game.height / 2 - 175, "inst-rope");
+	rope_img.scale.set(0.7);
+
+	var stack_img = Climb.game.add.sprite(35, Climb.game.height / 2 - 25, "inst-stack");
+	stack_img.scale.set(0.7);  
 }

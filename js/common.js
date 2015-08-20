@@ -26,7 +26,7 @@ var settings = {
 };
 
 var copyright_txt = "© BroTalk",
-	release_txt = "BETA.Aug.12.2015";
+	release_txt = "RC.Aug.20.2015";
 
 
 // FUNCTIONS ***********************************************
@@ -210,13 +210,13 @@ function createCopyright() {
 
 function createSoundScreenToggles() {
 
-	// soundBt
-	var soundBt = Climb.game.add.sprite(Climb.game.width - 15, Climb.game.height - 45, "square");
-	createBt(soundBt, "icon-screenshot", false, "square-small");
-	soundBt.group.fixedToCamera = true;
-	soundBt.events.onInputUp.add(function() {		
-		createScreenshot();
-	});
+	// // soundBt
+	// var soundBt = Climb.game.add.sprite(Climb.game.width - 15, Climb.game.height - 45, "square");
+	// createBt(soundBt, "icon-screenshot", false, "square-small");
+	// soundBt.group.fixedToCamera = true;
+	// soundBt.events.onInputUp.add(function() {	// 		
+	// 	createScreenshot();	// 	
+	// });
 
 	// fullscreenBt
 	var fullscreenBt = Climb.game.add.sprite(Climb.game.width - 15, Climb.game.height - 15, "square");
@@ -269,6 +269,7 @@ function fullscreenToggle() {
 }
 
 function createScreenshot() {
+
 	var url = document.getElementById("game").childNodes[0].toDataURL('png');
 	openInNewTab(url);    
-};
+}
