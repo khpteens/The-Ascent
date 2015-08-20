@@ -80,7 +80,7 @@ Climb.Game.prototype = {
         createPads();
         createClimbers();
         createRopes();
-        create_goats();
+        create_goats(25);
 
         createWinText();
         createTimer();
@@ -111,11 +111,10 @@ Climb.Game.prototype = {
     }
 };
 
-function create_goats() {
+function create_goats(gNum) {
 
     goats = Climb.game.add.group();
-
-    var gNum = 1;
+    
     for (var i = 0; i < gNum; i++) {
         create_goat(i);
     }
@@ -129,8 +128,10 @@ function create_goat(i) {
     g.alpha = 0;
 
     g.art = Climb.game.add.sprite(g.x, g.y, "goat");
-    g.art.anchor.set(0.5, 1);
-    g.art.width = g.art.height = 60;
+    g.art.anchor.set(0.5, 1);    
+    
+    // define animations (name, frame range, framerate, loop, ?)
+    g.art.animations.add('walk', [1, 2, 3, 4, 5, 6, 7], 20, true);
 
     // physics
     Climb.game.physics.arcade.enable([g]);
@@ -175,6 +176,8 @@ function update_goat_platform(g, p) {
 
         if (Math.abs(g.body.velocity.x) < 30) g.body.velocity.x += g.vX; // max at 
         g.body.velocity.y += g.vY;
+
+        g.art.animations.play('walk');
     }
 }
 
