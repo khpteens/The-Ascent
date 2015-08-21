@@ -80,7 +80,9 @@ Climb.Game.prototype = {
         createPads();
         createClimbers();
         createRopes();
-        create_goats(25);
+        create_goats(3);
+
+        createInputs();
 
         createWinText();
         createTimer();
@@ -114,7 +116,7 @@ Climb.Game.prototype = {
 function create_goats(gNum) {
 
     goats = Climb.game.add.group();
-    
+
     for (var i = 0; i < gNum; i++) {
         create_goat(i);
     }
@@ -122,28 +124,30 @@ function create_goats(gNum) {
 
 function create_goat(i) {
 
-    var g = Climb.game.add.sprite(50, 0, "fpo-circle");
+    var g = Climb.game.add.sprite(-60, 0, "fpo-circle");
     g.anchor.set(0, 1);
     g.width = g.height = 10;
     g.alpha = 0;
-
-    g.art = Climb.game.add.sprite(g.x, g.y, "goat");
-    g.art.anchor.set(0.5, 1);    
-    
-    // define animations (name, frame range, framerate, loop, ?)
-    g.art.animations.add('walk', [1, 2, 3, 4, 5, 6, 7], 20, true);
+    g.grounded = false;
 
     // physics
     Climb.game.physics.arcade.enable([g]);
     g.body.gravity.y = GRAVITY;
     g.body.bounce.set(0.2);
 
+    var art = Climb.game.add.sprite(g.x, g.y, "goat");
+    art.anchor.set(0.5, 1);
+    art.animations.add('walk', [1, 2, 3, 4, 5, 6, 7], 20, true); // define animations (name, frame range, framerate, loop, ?)
+    art.animations.add('hop', [8, 9, 10, 11, 12], 20, true);
+    // art.tint = 0xf6d809;
+    g.art = art;
+
     goats.add(g);
 
-    var randomDelay = Math.round(Math.random() * 1200);
+    delay = 0 + (i * 10000);    
     setTimeout(function() {
         reset_goat(g);
-    }, randomDelay);
+    }, delay);
 }
 
 function update_goats() {
@@ -161,33 +165,50 @@ function update_goat(g) {
         g.body.velocity.y = -150;
     }
     g.lastX = g.x;
-    g.grounded = false;
 
-    Climb.game.physics.arcade.collide(goats, platforms, update_goat_platform, null, this); //  Collide with platforms    
+    var myCollision = Climb.game.physics.arcade.collide(goats, platforms, update_goat_platform, null, this); //  Collide with platforms    
+
+    if (!myCollision) { // if in the air...
+        if (g.grounded == true) { // if was walking, start jumping once         
+            g.grounded = false;
+            // g.art.animations.play('hop');            
+        }
+        // g.art.animations.play('hop');        
+    }
 }
 
 function update_goat_platform(g, p) {
 
-    g.grounded = true;
-
-    if (g.x > 1400 || g.x < -100) {
+    // when goat collides with platform
+    if (g.x > 1400) { // if goat is out of central game area then remove
         reset_goat(g);
+
     } else {
+
+        if (!g.grounded) { // if was not grounded, start walking once      
+            g.grounded = true;
+            // if(g.art.animations.isPlaying){
+            //     g.art.animations.stop();
+            // }
+            // g.art.animations.play('walk');            
+        }
+        g.art.animations.play('walk');
 
         if (Math.abs(g.body.velocity.x) < 30) g.body.velocity.x += g.vX; // max at 
         g.body.velocity.y += g.vY;
-
-        g.art.animations.play('walk');
     }
 }
 
 function reset_goat(g) {
 
     if (goat_respawn) {
-        g.x = Math.round(Math.random() * 1000) + 200; // starting X position between 200 and 1200   
-        g.y = 0;
+
+        // g.x = Math.round(Math.random() * 1000) + 200; // starting X position between 200 and 1200  
+        g.x = -60;
+        g.y = 900;
 
         var randPosNeg = Math.round(Math.random()) * 2 - 1;
+        randPosNeg = 1;
         g.art.width = Math.abs(g.art.width) * randPosNeg * (-1);
         g.vX = randPosNeg * 2;
         g.vY = -3;
@@ -199,13 +220,13 @@ function reset_goat(g) {
 
 function clear_goats() {
     var len = goats.length;
-    for (var i = len-1; i >= 0 ; i--) {
-    
-        if(goats.children[i] != null){ // destroy from last to first elements in array
-            goats.children[i].art.destroy();             
-            goats.children[i].destroy();                     
+    for (var i = len - 1; i >= 0; i--) {
+
+        if (goats.children[i] != null) { // destroy from last to first elements in array
+            goats.children[i].art.destroy();
+            goats.children[i].destroy();
         }
-    }    
+    }
     goats = [];
 }
 
@@ -403,7 +424,8 @@ function createBackground() {
 
     var mountains = background.create(0, 0, "bg-mountains");
     mountains.height = settings.HEIGHT;
-    mountains.anchor.set(0.5, 0);
+    mountains.width = settings.WIDTH;
+    mountains.anchor.set(0);
     background.fixedToCamera = true;
 }
 
@@ -480,8 +502,6 @@ function createClimbers() {
     M.button = M_button;
     M.name = "M";
     createClimber(M);
-
-    createInputs();
 }
 
 function createClimber(c) {

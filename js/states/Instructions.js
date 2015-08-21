@@ -43,11 +43,11 @@ function createInstructions() {
 	text += "3. Your climbers can lift\nand pull each other up.\n\n";
 	text += "4. Reach the summit to win.";
 
-	var instructions = Climb.game.add.text(175, Climb.game.height / 2 - 175, text, p_style);
+	var instructions = Climb.game.add.text(Climb.game.width / 2 - 35, Climb.game.height / 2 - 175, text, p_style);
 
-	var rope_img = Climb.game.add.sprite(35, Climb.game.height / 2 - 175, "inst-rope");
+	var rope_img = Climb.game.add.sprite(Climb.game.width / 2 - 175, Climb.game.height / 2 - 175, "inst-rope");
 	rope_img.scale.set(0.7);
 
-	var stack_img = Climb.game.add.sprite(35, Climb.game.height / 2 - 25, "inst-stack");
+	var stack_img = Climb.game.add.sprite(Climb.game.width / 2 - 175, Climb.game.height / 2 - 25, "inst-stack");
 	stack_img.scale.set(0.7);  
 }

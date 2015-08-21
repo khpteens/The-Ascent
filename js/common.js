@@ -3,7 +3,7 @@
 // VARIABLES ***********************************************
 
 var settings = {
-	"WIDTH": 450,
+	"WIDTH": 900,//450,
 	"HEIGHT": 600,
 	"RATIO": window.innerHeight / window.innerWidth,
 	"RATIO_MIN": 1.2,
@@ -26,7 +26,7 @@ var settings = {
 };
 
 var copyright_txt = "© BroTalk",
-	release_txt = "RC.Aug.20.2015";
+	release_txt = "RC.Aug.21.2015";
 
 
 // FUNCTIONS ***********************************************

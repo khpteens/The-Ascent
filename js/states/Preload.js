@@ -69,7 +69,7 @@ Climb.Preload.prototype = {
 		this.load.image('bg-mountains', 'assets/img/bg-mountains.png');
 		this.load.image('fg-mountains', 'assets/img/fg-mountain.png');
 
-		this.load.spritesheet('goat', 'assets/img/goat.png', 49, 56, 13); // goat
+		this.load.spritesheet('goat', 'assets/img/goat2.png', 47, 56, 13); // goat
 
 		this.load.spritesheet('av-t', 'assets/img/av-t.png', 69, 100, 13); // 101	
 		this.load.spritesheet('av-e', 'assets/img/av-e.png', 72, 100, 13); // 102
@@ -98,7 +98,7 @@ Climb.Preload.prototype = {
 				families: ['Open+Sans:300,400,700:latin']
 			}
 		};
-		this.load.script('webfont', '//ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js');		
+		this.load.script('webfont', '//ajax.googleapis.com/ajax/libs/webfont/1/webfont.js');		
 
 		createStyles(); // set Title, body styles for project
 	},
