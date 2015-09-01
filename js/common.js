@@ -3,14 +3,18 @@
 // VARIABLES ***********************************************
 
 var settings = {
+
+	"NAME": "The Ascent",
+
 	"WIDTH": 500,
 	"HEIGHT": 600,
 	"RATIO": window.outerHeight / window.outerWidth,
 	"RATIO_MIN": 1.1,
-	"RATIO_MAX": 1.6,
+	"RATIO_MAX": 1.4,
 
 	"PAUSED": false,
 
+	"GA_CODE": "UA-66839321-1",
 	"ANALYTICS_ON": false,
 
 	"SOUND_ON": true,
@@ -34,7 +38,7 @@ if (settings.RATIO <= settings.RATIO_MIN) {
 settings.HEIGHT = settings.RATIO * settings.WIDTH;
 
 var copyright_txt = "© BroTalk",
-	release_txt = "RC.Aug.31.2015";
+	release_txt = "Release Candidate | Sept.1.2015";
 
 
 // FUNCTIONS ***********************************************
@@ -209,9 +213,10 @@ function createCopyright() {
 	c.fixedToCamera = true;
 
 	// release	
-	var release = Climb.game.add.text(10, Climb.game.height - 3, release_txt, style);
-	release.anchor.set(0, 1);
-	release.fixedToCamera = true;
+	// var release = Climb.game.add.text(10, Climb.game.height - 3, release_txt, style);
+	// release.anchor.set(0, 1);
+	// release.fixedToCamera = true;
+	trace(settings.NAME + " | " + release_txt)
 
 	createSoundScreenToggles();
 }
