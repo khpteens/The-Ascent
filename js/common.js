@@ -40,6 +40,7 @@ settings.HEIGHT = settings.RATIO * settings.WIDTH;
 var copyright_txt = "© BroTalk",
 	release_txt = "Release Candidate | Sept.1.2015";
 
+trace(settings.NAME + " | " + release_txt);
 
 // FUNCTIONS ***********************************************
 
@@ -202,21 +203,20 @@ function createCopyright() {
 
 	var st = Climb.game.state.getCurrentState().key,
 		style = copyright_style,
-		copyright_shift = 35;
+		copyright_shift = 10;
 	if (st === "Game") {
 		style = copyright_style_dark;		
 	}
 
 	// add copyright text	
-	var c = Climb.game.add.text(Climb.game.width - copyright_shift, Climb.game.height - 3, copyright_txt, style);
-	c.anchor.set(1, 1);
+	var c = Climb.game.add.text(copyright_shift, Climb.game.height - 3, copyright_txt, style);
+	c.anchor.set(0, 1);
 	c.fixedToCamera = true;
 
 	// release	
 	// var release = Climb.game.add.text(10, Climb.game.height - 3, release_txt, style);
 	// release.anchor.set(0, 1);
-	// release.fixedToCamera = true;
-	trace(settings.NAME + " | " + release_txt)
+	// release.fixedToCamera = true;	
 
 	createSoundScreenToggles();
 }
