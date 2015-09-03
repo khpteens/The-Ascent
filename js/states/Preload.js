@@ -69,17 +69,16 @@ Climb.Preload.prototype = {
 		this.load.image('bg-mountains', 'assets/img/bg-mountains.png');
 		this.load.image('fg-mountains', 'assets/img/fg-mountain.png');
 
+		// spritesheets
+		// this.load.spritesheet('icon-sound', 'assets/img/i/soundOnOff.png', 60, 60);
+		this.load.spritesheet('icon-fullscreen', 'assets/img/i/expand-contract.png', 60, 60);
+		
 		this.load.spritesheet('goat', 'assets/img/goat2.png', 47, 56, 13); // goat
 
 		this.load.spritesheet('av-t', 'assets/img/av-t.png', 69, 100, 13); // 101	
 		this.load.spritesheet('av-e', 'assets/img/av-e.png', 72, 100, 13); // 102
 		this.load.spritesheet('av-a', 'assets/img/av-a.png', 74, 100, 13); // 101
-		this.load.spritesheet('av-m', 'assets/img/av-m.png', 73, 100, 13); // 102
-
-		// this.load.spritesheet('av-t', 'assets/img/av-n.png', 69, 100, 13); // 101	
-		// this.load.spritesheet('av-e', 'assets/img/av-o.png', 74, 100, 13); // 102
-		// this.load.spritesheet('av-a', 'assets/img/av-u.png', 72, 100, 13); // 101
-		// this.load.spritesheet('av-m', 'assets/img/av-s.png', 72, 100, 13); // 102
+		this.load.spritesheet('av-m', 'assets/img/av-m.png', 73, 100, 13); // 102		
 
 		// Audio        
 		//this.load.audio('hit1', 'assets/audio/bat_hit_ball.mp3');		
