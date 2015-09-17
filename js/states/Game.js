@@ -120,6 +120,7 @@ function create_goats(gNum) {
     for (var i = 0; i < gNum; i++) {
         create_goat(i);
     }
+    goat_respawn = true;
 }
 
 function create_goat(i) {
@@ -144,7 +145,7 @@ function create_goat(i) {
 
     goats.add(g);
 
-    delay = 0 + (i * 10000);    
+    delay = 0 + (i * 10000);
     setTimeout(function() {
         reset_goat(g);
     }, delay);
@@ -228,6 +229,7 @@ function clear_goats() {
         }
     }
     goats = [];
+    goat_respawn = false;
 }
 
 function createPads() {
@@ -386,7 +388,7 @@ function createWinText() {
     overlay.inputEnabled = true;
     overlay.beginFill(0x000000, 1);
     overlay.boundsPadding = 0;
-    overlay.drawRect(0, Climb.game.height / 2 - 130, Climb.game.width, 325);
+    overlay.drawRect(0, Climb.game.height / 2 - 130, Climb.game.width, 265); // 325 height with restart button
     overlay.alpha = 0.6;
     winMessage.add(overlay);
 
@@ -399,20 +401,16 @@ function createWinText() {
     // Continue button
     ContinueBt = Climb.game.add.sprite(settings.WIDTH / 2, settings.HEIGHT / 2 + 60, 'square');
     createBt(ContinueBt, "Continue", "Finish");
-    winMessage.add(ContinueBt);
-    winMessage.add(ContinueBt.label);
-    winMessage.add(ContinueBt.border);
+    winMessage.add(ContinueBt.group);    
 
     // Restart button
-    AgainBt = Climb.game.add.sprite(settings.WIDTH / 2, settings.HEIGHT / 2 + 120, 'square');
-    createBt(AgainBt, "Restart", false);
-    AgainBt.events.onInputUp.add(function() {
-        winMessage.visible = false;
-        gameRestart();
-    }, this);
-    winMessage.add(AgainBt);
-    winMessage.add(AgainBt.label);
-    winMessage.add(AgainBt.border);
+    // AgainBt = Climb.game.add.sprite(settings.WIDTH / 2, settings.HEIGHT / 2 + 120, 'square');
+    // createBt(AgainBt, "Restart", false);
+    // AgainBt.events.onInputUp.add(function() {
+    //     winMessage.visible = false;
+    //     gameRestart();
+    // }, this);
+    // winMessage.add(AgainBt.group);    
 
     winMessage.visible = false;
 }
@@ -1097,8 +1095,11 @@ function overlapRope(c, rope) {
 
 function gameRestart() {
 
+    gamePaused = false;
     clear_goats();
     create_goats();
+    goat_respawn = true;
+    gamePaused = false;
 
     winText.visible = false;
     if (Climb.game.device.touch) touchinterface.visible = true; // show touch interface if hasTouch    
@@ -1107,17 +1108,18 @@ function gameRestart() {
     Climb.game.camera.y = Climb.game.world.height - settings.HEIGHT;
 
     T.x = T.lastX = 40 - 36;
-    T.y = T.lastY = Climb.game.world.height - 300;
-    T.platform = 'ground';
     E.x = E.lastX = 110 - 36;
-    E.y = E.lastY = Climb.game.world.height - 300;
-    E.platform = 'ground';
     A.x = A.lastX = 180 - 36;
-    A.y = A.lastY = Climb.game.world.height - 300;
-    A.platform = 'ground';
     M.x = M.lastX = 250 - 36;
-    M.y = M.lastY = Climb.game.world.height - 300;
-    M.platform = 'ground';
+
+    // do things to the climbers
+    for (var i = 0, len = climbers.children.length; i < len; i++) {
+        // climbers.children[i].body.velocity.y = 0;
+        climbers.children[i].body.allowGravity = true;
+        climbers.children[i].frame = 0;
+        climbers.children[i].platform = 'ground';
+        climbers.children[i].y = climbers.children[i].lastY = Climb.game.world.height - 300;
+    }
 
     userinterface.visible = true;
     toggleDirectionReset();
@@ -1150,7 +1152,9 @@ function gameCheckWin() {
     }
 }
 
-function gameWin() {
+function gameWin() {     
+
+    gamePaused = true;
 
     if (ropeArt != null) {
         ropeArt.destroy();
@@ -1158,10 +1162,19 @@ function gameWin() {
     }
     clear_goats();
 
-    // show win message with continue button
-    winMessage.visible = true;
+    // show win message with continue button    
     if (touchinterface.visible) touchinterface.visible = false;
-    userinterface.visible = false;
+
+    toggleLR.group.visible = false;
+    optionsBt.group.visible = false;
+    // userinterface.visible = false;
+
+    // do things to the climbers
+    for (var i = 0, len = climbers.children.length; i < len; i++) {
+        climbers.children[i].body.velocity.y = 0;
+        climbers.children[i].body.allowGravity = false;
+        climbers.children[i].frame = 2;
+    }
 
     gameComplete = true;
 
@@ -1169,6 +1182,14 @@ function gameWin() {
         bestTime = currentTime;
         best.text = "BEST: " + bestTime;
     }
+
+    winMessage.visible = true;
+    winMessage.alpha = 0;
+    Climb.game.add.tween(winMessage).to({
+        alpha: 1
+    }, 1000, Phaser.Easing.Linear.None, true, 1500, 0, false);
+
+
 }
 
 // Input functions (Keyboard,Buttons)

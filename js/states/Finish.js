@@ -33,14 +33,14 @@ Climb.Finish.prototype = {
 		var ChatBt = this.game.add.sprite(this.game.world.centerX, this.game.height/2 + 120, "square");
 		createBt(ChatBt, "Chat with a counsellor", "Contact");
 		ChatBt.events.onInputUp.add(function(){
-			trackEvent("Chat with a Counsellor clicked", Vent.game.state.getCurrentState().key+" screen");
+			trackEvent("Chat with a Counsellor clicked", Climb.game.state.getCurrentState().key+" screen");
 		}, this);
 
 		// Play again 
 		var PlayAgainBt = this.game.add.sprite(this.game.world.centerX, this.game.height/2 + 180, "square");
 		createBt(PlayAgainBt, "Main menu", "MainMenu");
-		aLittleBt.events.onInputUp.add(function(){
-			trackEvent("Play Again clicked", Vent.game.state.getCurrentState().key+" screen");
+		PlayAgainBt.events.onInputUp.add(function(){
+			trackEvent("Play Again clicked", Climb.game.state.getCurrentState().key+" screen");
 		}, this);
 	},
 	update: function() {

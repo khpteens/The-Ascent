@@ -38,7 +38,7 @@ if (settings.RATIO <= settings.RATIO_MIN) {
 settings.HEIGHT = settings.RATIO * settings.WIDTH;
 
 var copyright_txt = "© BroTalk",
-	release_txt = "Release Candidate | Sept.3.2015",
+	release_txt = "Release Candidate | Sept.15.2015",
 	soundBt, fullscreenBt;
 
 trace(settings.NAME + " | " + release_txt);
@@ -146,7 +146,6 @@ function createBt(button, label_text, target_state, shape, iconImage) {
 		icon.width = button.height - iconMod;
 		button.icon = icon;
 	}
-
 
 	if (target_state != false && target_state != undefined) {
 		button.events.onInputUp.add(function() {			

@@ -48,8 +48,10 @@ Climb.Preload.prototype = {
 		this.load.image('wordmark', 'assets/img/wordmark.png');
 
 		// instructions
-		this.load.image('inst-rope', 'assets/img/instructions-rope.png');
-		this.load.image('inst-stack', 'assets/img/instructions-stack.png');
+		this.load.image('inst-keys', 'assets/img/keys.png');
+		this.load.image('inst-peak', 'assets/img/instructions-peak.png');
+		this.load.spritesheet('instructions1', 'assets/img/instructions1.png', 201, 181, 11); // boosting	
+		this.load.spritesheet('instructions2', 'assets/img/instructions2.png', 201, 181, 11); // rope climb
 
 		// icons 
 		this.load.image('icon-walk-right', 'assets/img/i/walk-right.png');
@@ -64,6 +66,7 @@ Climb.Preload.prototype = {
 		this.load.image('icon-expand', 'assets/img/i/expand.png');
 		this.load.image('icon-contract', 'assets/img/i/contract.png');
 		this.load.image('icon-screenshot', 'assets/img/i/screenshot.png');
+		this.load.image('icon-arrow-left', 'assets/img/i/arrow-left.png');
 
 		// sprites
 		this.load.image('bg-mountains', 'assets/img/bg-mountains.png');
@@ -78,7 +81,7 @@ Climb.Preload.prototype = {
 		this.load.spritesheet('av-t', 'assets/img/av-t.png', 69, 100, 13); // 101	
 		this.load.spritesheet('av-e', 'assets/img/av-e.png', 72, 100, 13); // 102
 		this.load.spritesheet('av-a', 'assets/img/av-a.png', 74, 100, 13); // 101
-		this.load.spritesheet('av-m', 'assets/img/av-m.png', 73, 100, 13); // 102		
+		this.load.spritesheet('av-m', 'assets/img/av-m.png', 73, 100, 13); // 102			
 
 		// Audio        
 		//this.load.audio('hit1', 'assets/audio/bat_hit_ball.mp3');		
