@@ -92,10 +92,8 @@ function createPane1() {
 
 	var pane = Climb.game.add.group();
 
-	// image
-	var img = "inst-keys";
-	if (hasTouch) img = "inst-buttons";
-	var keys = Climb.game.add.sprite(Climb.game.width / 2, Climb.game.height / 2 - 0, img);
+	// image	
+	var keys = Climb.game.add.sprite(Climb.game.width / 2, Climb.game.height / 2 - 0, "inst-keys");
 	keys.anchor.set(0.5);
 	keys.scale.set(1.5);
 	pane.add(keys);

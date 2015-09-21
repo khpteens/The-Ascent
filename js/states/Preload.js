@@ -48,11 +48,18 @@ Climb.Preload.prototype = {
 		this.load.image('wordmark', 'assets/img/wordmark.png');
 
 		// instructions
-		this.load.image('inst-keys', 'assets/img/keys.png');
-		this.load.image('inst-buttons', 'assets/img/buttons.png');
-		this.load.image('inst-peak', 'assets/img/instructions-peak.png');
-		this.load.spritesheet('instructions1', 'assets/img/instructions1.png', 201, 181, 11); // boosting	
-		this.load.spritesheet('instructions2', 'assets/img/instructions2.png', 201, 181, 11); // rope climb
+		var keysURL = 'assets/img/keys.png',
+			instr1URL = 'assets/img/instructions1.png',
+			instr2URL = 'assets/img/instructions2.png';
+		if(hasTouch){
+			keysURL = 'assets/img/buttons.png';
+			instr1URL = 'assets/img/instructions1-touch.png',
+			instr2URL = 'assets/img/instructions2-touch.png';
+		}
+		this.load.image('inst-keys', keysURL); // inputs
+		this.load.spritesheet('instructions1', instr1URL, 201, 181, 11); // boosting	
+		this.load.spritesheet('instructions2', instr2URL, 201, 181, 11); // rope climb
+		this.load.image('inst-peak', 'assets/img/instructions-peak.png'); // win
 
 		// icons 
 		this.load.image('icon-walk-right', 'assets/img/i/walk-right.png');
