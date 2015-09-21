@@ -5,6 +5,8 @@
 var settings = {
 
 	"NAME": "The Ascent",
+	"RELEASE": "Release Candidate",
+	"UPDATED": "Sept.21.2015",
 
 	"WIDTH": 500,
 	"HEIGHT": 600,
@@ -37,11 +39,12 @@ if (settings.RATIO <= settings.RATIO_MIN) {
 
 settings.HEIGHT = settings.RATIO * settings.WIDTH;
 
-var copyright_txt = "© BroTalk",
-	release_txt = "Release Candidate | Sept.15.2015",
+var copyright_txt = "© BroTalk",	
 	soundBt, fullscreenBt;
 
-trace(settings.NAME + " | " + release_txt);
+trace(settings.NAME + " | " + settings.RELEASE + " | " + settings.UPDATED);
+
+fullscreenToggle();
 
 // FUNCTIONS ***********************************************
 
@@ -272,7 +275,7 @@ function fullscreenToggle() {
 		settings.FRAME.style.width = window.innerWidth + "px";
 		settings.FRAME.style.height = window.innerHeight + "px";
 
-		fullscreenBt.label.frame = 1;
+		if(fullscreenBt) fullscreenBt.label.frame = 1;
 
 	} else {
 		settings.FULLSCREEN = false;

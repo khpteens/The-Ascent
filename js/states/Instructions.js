@@ -4,13 +4,16 @@ var myCounter = 0,
 	rope_instr,
 	panes = [],
 	cPane = 0,
-	inst_continueBt;
+	inst_continueBt, inst_prevBt;
 
 
 var Climb = Climb || {};
 
 //loading the game assets
-Climb.Instructions = function() {};
+Climb.Instructions = function() {
+
+	this.myCounter = 0;
+};
 
 Climb.Instructions.prototype = {
 	init: function() {
@@ -57,16 +60,18 @@ Climb.Instructions.prototype = {
 		createBt(inst_nextBt, "Next", false);
 		inst_nextBt.events.onInputUp.add(clickNextBt, this);
 
-		// // next2 button
-		// inst_nextBt2 = Climb.game.add.sprite(Climb.game.width / 2 + 205, Climb.game.height / 2 - 25, "square");
+		// // next2 button (next arrow)
+		// inst_nextBt2 = Climb.game.add.sprite(Climb.game.width / 2 + 205, Climb.game.height / 2 + 160, "square");
 		// createBt(inst_nextBt2, "icon-arrow-left", false, "circle");
 		// inst_nextBt2.label.width *= -1;
 		// inst_nextBt2.events.onInputUp.add(clickNextBt, this);
+		// inst_nextBt2.group.visible = false;
 
-		// // prev button
-		// var prevBt = Climb.game.add.sprite(Climb.game.width / 2 - 205, Climb.game.height / 2 - 25, "square");
-		// createBt(prevBt, "icon-arrow-left", false, "circle");
-		// prevBt.events.onInputUp.add(clickPrevBt, this);
+		// prev button (back arrow)
+		inst_prevBt = Climb.game.add.sprite(Climb.game.width / 2 - 205, Climb.game.height / 2 + 160, "square");
+		createBt(inst_prevBt, "icon-arrow-left", false, "circle");
+		inst_prevBt.events.onInputUp.add(clickPrevBt, this);
+		inst_prevBt.group.visible = false;
 
 	},
 	update: function() {
@@ -88,8 +93,11 @@ function createPane1() {
 	var pane = Climb.game.add.group();
 
 	// image
-	var keys = Climb.game.add.sprite(Climb.game.width / 2, Climb.game.height / 2 - 25, "inst-keys");
+	var img = "inst-keys";
+	if (hasTouch) img = "inst-buttons";
+	var keys = Climb.game.add.sprite(Climb.game.width / 2, Climb.game.height / 2 - 0, img);
 	keys.anchor.set(0.5);
+	keys.scale.set(1.5);
 	pane.add(keys);
 
 	// text
@@ -187,16 +195,24 @@ function createPane4() {
 
 function updatePane(n) {
 
-	panes[cPane].visible = false; // hide old pane
+	if (!inst_prevBt.group.visible) inst_prevBt.group.visible = true;
+
+	rope_instr.frame = boost_instr.frame = 0;
+
+	panes[cPane].visible = false; // hide old pane	
 
 	cPane += n;
+
+	inst_continueBt.group.visible = false; // show "Play Game" button		
+	inst_nextBt.group.visible = true; // hide "Continue" button
+
 	if (cPane >= panes.length) {
 		cPane = 0;
 	} else if (cPane < 0) {
 		cPane = panes.length - 1;
 	} else if (cPane == panes.length - 1) {
-		inst_continueBt.group.visible = true;
-		inst_nextBt.group.visible = false;
+		inst_continueBt.group.visible = true; // show "Play Game" button		
+		inst_nextBt.group.visible = false; // hide "Continue" button
 	}
 
 	panes[cPane].visible = true; // show new pane

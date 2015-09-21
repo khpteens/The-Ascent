@@ -49,6 +49,7 @@ Climb.Preload.prototype = {
 
 		// instructions
 		this.load.image('inst-keys', 'assets/img/keys.png');
+		this.load.image('inst-buttons', 'assets/img/buttons.png');
 		this.load.image('inst-peak', 'assets/img/instructions-peak.png');
 		this.load.spritesheet('instructions1', 'assets/img/instructions1.png', 201, 181, 11); // boosting	
 		this.load.spritesheet('instructions2', 'assets/img/instructions2.png', 201, 181, 11); // rope climb
